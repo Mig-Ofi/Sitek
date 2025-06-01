@@ -1,144 +1,89 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <title>Presente Misterioso</title>
-    <style>
-        body {
-            background-color: black;
-            color: lime;
-            font-family: monospace;
-            padding: 20px;
-            text-align: center;
-        }
-        .emoji {
-            font-size: 100px;
-            cursor: pointer;
-        }
-        .mensagem {
-            margin-top: 30px;
-            font-size: 20px;
-            display: none;
-        }
-        .tree {
-            white-space: pre;
-            text-align: left;
-            margin-top: 20px;
-            display: none;
-        }
-    </style>
+<meta charset="UTF-8" />
+<title>Presente Surpresa</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    margin-top: 50px;
+  }
+  .presente {
+    font-size: 50px;
+    cursor: pointer;
+  }
+  #mensagem {
+    font-size: 24px;
+    margin-top: 20px;
+  }
+  #aviso {
+    margin-top: 40px;
+    font-weight: bold;
+    color: #a00;
+  }
+  #arvore {
+    margin-top: 20px;
+    font-family: monospace;
+    white-space: pre;
+    text-align: left;
+    display: inline-block;
+  }
+  #txt-link {
+    margin-top: 30px;
+    display: block;
+    font-size: 18px;
+    text-decoration: none;
+    color: blue;
+  }
+</style>
 </head>
 <body>
 
-    <h1>Clique no presente 🎁</h1>
-    <div class="emoji" onclick="mostrarPresente()">🎁</div>
+<div class="presente" id="presente" title="Clique no presente 🎁">🎁</div>
+<div id="mensagem"></div>
+<div id="aviso"></div>
+<pre id="arvore"></pre>
 
-    <div class="mensagem" id="mensagem1">O presente é um parabéns 👏👏</div>
-    <div class="mensagem" id="mensagem2">Ah, agora tenho acesso a boa parte dos seus arquivos 😉. Ass:Não é o Miguel</div>
-    <div class="tree" id="tree">Carregando árvore de arquivos...</div>
+<a href="Gostou do presente?.txt" download id="txt-link" style="display:none;">
+  📄 Clique aqui para baixar seu arquivo “Gostou do presente? 😉”
+</a>
 
-    <script>
-        function detectarSO() {
-            const userAgent = navigator.userAgent;
-            if (/Windows/i.test(userAgent)) return "Windows";
-            if (/Android/i.test(userAgent)) return "Android";
-            if (/iPhone|iPad|iPod/i.test(userAgent)) return "iOS";
-            if (/Macintosh/i.test(userAgent)) return "Mac";
-            if (/Linux/i.test(userAgent)) return "Linux";
-            return "Desconhecido";
-        }
+<script>
+  const presente = document.getElementById('presente');
+  const mensagem = document.getElementById('mensagem');
+  const aviso = document.getElementById('aviso');
+  const arvore = document.getElementById('arvore');
+  const txtLink = document.getElementById('txt-link');
 
-        function gerarArvoreFake(so) {
-            switch(so) {
-                case "Windows":
-                    return `
-C:\
-├── Users
-│   ├── Public
-│   └── ${getUserName()}
-├── Program Files
-│   ├── Google
-│   └── Windows Defender
-├── Windows
-│   ├── System32
-│   └── Temp
-└── Arquivos
-    ├── imagens.jpg
-    └── documentos.docx
-                    `;
-                case "Android":
-                    return `
-/storage/emulated/0/
-├── DCIM
-│   ├── Camera
-│   └── Screenshots
-├── Download
-│   ├── provas.pdf
-│   └── memes.jpg
-├── WhatsApp
-│   ├── Media
-│   └── Backups
-└── Android
-    └── data
-                    `;
-                case "iOS":
-                    return `
-On My iPhone
-├── Files
-│   ├── fotos.jpg
-│   └── notas.txt
-├── WhatsApp
-│   └── backups
-└── iCloud Drive
-    └── documentos
-                    `;
-                case "Mac":
-                    return `
-/Users/${getUserName()}
-/├── Documents
-│   └── trabalho.docx
-├── Downloads
-│   └── setup.dmg
-├── Applications
-└── Library
-    └── Preferences
-                    `;
-                case "Linux":
-                    return `
-/home/${getUserName()}
-/├── Documents
-│   └── trabalho.docx
-├── Downloads
-│   └── setup.tar.gz
-├── etc
-│   └── hosts
-└── var
-    └── log
-                    `;
-                default:
-                    return "Sistema não reconhecido. Não foi possível acessar os arquivos.";
-            }
-        }
+  function gerarArvoreFake() {
+    return `
+C:\\
+├─ Documentos
+│  ├─ Trabalho.docx
+│  ├─ Receitas.pdf
+│  └─ Projeto
+│     ├─ main.py
+│     └─ README.md
+├─ Imagens
+│  ├─ férias.jpg
+│  └─ selfie.png
+└─ Música
+   ├─ rock.mp3
+   └─ jazz.mp3
+    `;
+  }
 
-        function getUserName() {
-            const nomes = ['joao', 'maria', 'user', 'admin', 'miguel', 'anon'];
-            return nomes[Math.floor(Math.random() * nomes.length)];
-        }
+  presente.onclick = () => {
+    mensagem.textContent = 'O presente é um parabéns 👏👏';
+    aviso.textContent = 'Ah, agora tenho acesso a boa parte dos seus arquivos...';
+    txtLink.style.display = 'inline-block';
 
-        function mostrarPresente() {
-            document.getElementById('mensagem1').style.display = 'block';
-            setTimeout(() => {
-                document.getElementById('mensagem2').style.display = 'block';
-                setTimeout(() => {
-                    const so = detectarSO();
-                    const arvore = gerarArvoreFake(so);
-                    const treeDiv = document.getElementById('tree');
-                    treeDiv.innerText = `Sistema Detectado: ${so}\n${arvore}`;
-                    treeDiv.style.display = 'block';
-                }, 2000);
-            }, 1000);
-        }
-    </script>
+    setTimeout(() => {
+      arvore.textContent = gerarArvoreFake();
+    }, 2000);
+  };
+</script>
 
 </body>
 </html>

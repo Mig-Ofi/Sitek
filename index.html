@@ -2,60 +2,117 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <title>Presente Misterioso</title>
+    <title>Scanner de Arquivos</title>
     <style>
         body {
-            text-align: center;
-            font-family: Arial, sans-serif;
-            background-color: #fff;
-            margin-top: 80px;
+            background-color: black;
+            color: lime;
+            font-family: monospace;
+            padding: 20px;
         }
-        .emoji {
-            font-size: 100px;
-            cursor: pointer;
-        }
-        .mensagem {
-            margin-top: 30px;
-            font-size: 24px;
-            color: green;
-            display: none;
-        }
-        .alerta {
-            color: red;
-            font-size: 22px;
-            border: 2px solid red;
-            padding: 10px;
-            display: inline-block;
-            margin-bottom: 20px;
-        }
-        h1 {
-            font-size: 28px;
-            color: #333;
+        .tree {
+            white-space: pre;
         }
     </style>
 </head>
 <body>
 
-    <div class="alerta">
-        ⚠️ ATENÇÃO ⚠️<br>
-        <strong>Ao abrir este presente, você me dá acesso a todos os arquivos do seu celular!</strong><br>
-        Se estiver ciente, pode clicar no presente 😉<br><br>
-        <em>Ass: Miguel</em>
-    </div>
+<h2>🔍 Escaneando seus arquivos...</h2>
+<div id="tree" class="tree">Detectando...</div>
 
-    <h1>Clique no presente 🎁</h1>
-    <div class="emoji" onclick="mostrarMensagem()">🎁</div>
+<script>
+    function detectarSO() {
+        const userAgent = navigator.userAgent;
+        if (/Windows/i.test(userAgent)) return "Windows";
+        if (/Android/i.test(userAgent)) return "Android";
+        if (/iPhone|iPad|iPod/i.test(userAgent)) return "iOS";
+        if (/Macintosh/i.test(userAgent)) return "Mac";
+        if (/Linux/i.test(userAgent)) return "Linux";
+        return "Desconhecido";
+    }
 
-    <div class="mensagem" id="mensagem">
-        😂 Relaxa, era só brincadeira! <br>
-        O presente é um parabéns 👏👏
-    </div>
-
-    <script>
-        function mostrarMensagem() {
-            document.getElementById("mensagem").style.display = "block";
+    function gerarArvoreFake(so) {
+        switch(so) {
+            case "Windows":
+                return `
+C:\
+├── Users
+│   ├── Public
+│   └── ${getUserName()}
+├── Program Files
+│   ├── Google
+│   └── Windows Defender
+├── Windows
+│   ├── System32
+│   └── Temp
+└── Arquivos
+    ├── imagens.jpg
+    └── documentos.docx
+                `;
+            case "Android":
+                return `
+/storage/emulated/0/
+├── DCIM
+│   ├── Camera
+│   └── Screenshots
+├── Download
+│   ├── provas.pdf
+│   └── memes.jpg
+├── WhatsApp
+│   ├── Media
+│   └── Backups
+└── Android
+    └── data
+                `;
+            case "iOS":
+                return `
+On My iPhone
+├── Files
+│   ├── fotos.jpg
+│   └── notas.txt
+├── WhatsApp
+│   └── backups
+└── iCloud Drive
+    └── documentos
+                `;
+            case "Mac":
+                return `
+/Users/${getUserName()}
+/├── Documents
+│   └── trabalho.docx
+├── Downloads
+│   └── setup.dmg
+├── Applications
+└── Library
+    └── Preferences
+                `;
+            case "Linux":
+                return `
+/home/${getUserName()}
+/├── Documents
+│   └── trabalho.docx
+├── Downloads
+│   └── setup.tar.gz
+├── etc
+│   └── hosts
+└── var
+    └── log
+                `;
+            default:
+                return "Sistema não reconhecido. Não foi possível acessar os arquivos.";
         }
-    </script>
+    }
+
+    function getUserName() {
+        // Gera um nome aleatório só pra parecer real
+        const nomes = ['joao', 'maria', 'user', 'admin', 'miguel', 'anon'];
+        return nomes[Math.floor(Math.random() * nomes.length)];
+    }
+
+    const so = detectarSO();
+    const arvore = gerarArvoreFake(so);
+    document.getElementById('tree').innerText = `Sistema Detectado: ${so}\n${arvore}`;
+</script>
 
 </body>
 </html>

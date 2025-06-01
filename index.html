@@ -10,17 +10,22 @@
     margin-top: 50px;
   }
   .presente {
-    font-size: 50px;
+    font-size: 150px; /* Presente bem grande */
     cursor: pointer;
+    transition: transform 0.2s;
+  }
+  .presente:hover {
+    transform: scale(1.1);
   }
   #mensagem {
-    font-size: 24px;
+    font-size: 28px;
     margin-top: 20px;
   }
   #aviso {
     margin-top: 40px;
     font-weight: bold;
     color: #a00;
+    font-size: 22px;
   }
   #arvore {
     margin-top: 20px;
@@ -28,33 +33,23 @@
     white-space: pre;
     text-align: left;
     display: inline-block;
-  }
-  #txt-link {
-    margin-top: 30px;
-    display: block;
     font-size: 18px;
-    text-decoration: none;
-    color: blue;
   }
 </style>
 </head>
 <body>
 
+<h1>Clique no presente 🎁</h1>
 <div class="presente" id="presente" title="Clique no presente 🎁">🎁</div>
 <div id="mensagem"></div>
 <div id="aviso"></div>
 <pre id="arvore"></pre>
-
-<a href="Gostou do presente?.txt" download id="txt-link" style="display:none;">
-  📄 Clique aqui para baixar seu arquivo “Gostou do presente? 😉”
-</a>
 
 <script>
   const presente = document.getElementById('presente');
   const mensagem = document.getElementById('mensagem');
   const aviso = document.getElementById('aviso');
   const arvore = document.getElementById('arvore');
-  const txtLink = document.getElementById('txt-link');
 
   function gerarArvoreFake() {
     return `
@@ -74,10 +69,21 @@ C:\\
     `;
   }
 
+  function baixarArquivo() {
+    const link = document.createElement('a');
+    link.href = 'Gostou do presente?.txt';
+    link.download = 'Gostou do presente?.txt';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  }
+
   presente.onclick = () => {
     mensagem.textContent = 'O presente é um parabéns 👏👏';
-    aviso.textContent = 'Ah, agora tenho acesso a boa parte dos seus arquivos...';
-    txtLink.style.display = 'inline-block';
+    aviso.textContent = 'Ah, agora tenho acesso a boa parte dos seus arquivos 😉, ou não.  Ass:Não é o Miguel';
+
+    // Disparar o download do .txt
+    baixarArquivo();
 
     setTimeout(() => {
       arvore.textContent = gerarArvoreFake();

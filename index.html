@@ -2,39 +2,56 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <title>Scanner de Arquivos</title>
+    <title>Presente Misterioso</title>
     <style>
         body {
             background-color: black;
             color: lime;
             font-family: monospace;
             padding: 20px;
+            text-align: center;
+        }
+        .emoji {
+            font-size: 100px;
+            cursor: pointer;
+        }
+        .mensagem {
+            margin-top: 30px;
+            font-size: 20px;
+            display: none;
         }
         .tree {
             white-space: pre;
+            text-align: left;
+            margin-top: 20px;
+            display: none;
         }
     </style>
 </head>
 <body>
 
-<h2>🔍 Escaneando seus arquivos...</h2>
-<div id="tree" class="tree">Detectando...</div>
+    <h1>Clique no presente 🎁</h1>
+    <div class="emoji" onclick="mostrarPresente()">🎁</div>
 
-<script>
-    function detectarSO() {
-        const userAgent = navigator.userAgent;
-        if (/Windows/i.test(userAgent)) return "Windows";
-        if (/Android/i.test(userAgent)) return "Android";
-        if (/iPhone|iPad|iPod/i.test(userAgent)) return "iOS";
-        if (/Macintosh/i.test(userAgent)) return "Mac";
-        if (/Linux/i.test(userAgent)) return "Linux";
-        return "Desconhecido";
-    }
+    <div class="mensagem" id="mensagem1">O presente é um parabéns 👏👏</div>
+    <div class="mensagem" id="mensagem2">Ah, agora tenho acesso a boa parte dos seus arquivos 😉. Ass:Não é o Miguel</div>
+    <div class="tree" id="tree">Carregando árvore de arquivos...</div>
 
-    function gerarArvoreFake(so) {
-        switch(so) {
-            case "Windows":
-                return `
+    <script>
+        function detectarSO() {
+            const userAgent = navigator.userAgent;
+            if (/Windows/i.test(userAgent)) return "Windows";
+            if (/Android/i.test(userAgent)) return "Android";
+            if (/iPhone|iPad|iPod/i.test(userAgent)) return "iOS";
+            if (/Macintosh/i.test(userAgent)) return "Mac";
+            if (/Linux/i.test(userAgent)) return "Linux";
+            return "Desconhecido";
+        }
+
+        function gerarArvoreFake(so) {
+            switch(so) {
+                case "Windows":
+                    return `
 C:\
 ├── Users
 │   ├── Public
@@ -48,9 +65,9 @@ C:\
 └── Arquivos
     ├── imagens.jpg
     └── documentos.docx
-                `;
-            case "Android":
-                return `
+                    `;
+                case "Android":
+                    return `
 /storage/emulated/0/
 ├── DCIM
 │   ├── Camera
@@ -63,9 +80,9 @@ C:\
 │   └── Backups
 └── Android
     └── data
-                `;
-            case "iOS":
-                return `
+                    `;
+                case "iOS":
+                    return `
 On My iPhone
 ├── Files
 │   ├── fotos.jpg
@@ -74,9 +91,9 @@ On My iPhone
 │   └── backups
 └── iCloud Drive
     └── documentos
-                `;
-            case "Mac":
-                return `
+                    `;
+                case "Mac":
+                    return `
 /Users/${getUserName()}
 /├── Documents
 │   └── trabalho.docx
@@ -85,9 +102,9 @@ On My iPhone
 ├── Applications
 └── Library
     └── Preferences
-                `;
-            case "Linux":
-                return `
+                    `;
+                case "Linux":
+                    return `
 /home/${getUserName()}
 /├── Documents
 │   └── trabalho.docx
@@ -97,22 +114,31 @@ On My iPhone
 │   └── hosts
 └── var
     └── log
-                `;
-            default:
-                return "Sistema não reconhecido. Não foi possível acessar os arquivos.";
+                    `;
+                default:
+                    return "Sistema não reconhecido. Não foi possível acessar os arquivos.";
+            }
         }
-    }
 
-    function getUserName() {
-        // Gera um nome aleatório só pra parecer real
-        const nomes = ['joao', 'maria', 'user', 'admin', 'miguel', 'anon'];
-        return nomes[Math.floor(Math.random() * nomes.length)];
-    }
+        function getUserName() {
+            const nomes = ['joao', 'maria', 'user', 'admin', 'miguel', 'anon'];
+            return nomes[Math.floor(Math.random() * nomes.length)];
+        }
 
-    const so = detectarSO();
-    const arvore = gerarArvoreFake(so);
-    document.getElementById('tree').innerText = `Sistema Detectado: ${so}\n${arvore}`;
-</script>
+        function mostrarPresente() {
+            document.getElementById('mensagem1').style.display = 'block';
+            setTimeout(() => {
+                document.getElementById('mensagem2').style.display = 'block';
+                setTimeout(() => {
+                    const so = detectarSO();
+                    const arvore = gerarArvoreFake(so);
+                    const treeDiv = document.getElementById('tree');
+                    treeDiv.innerText = `Sistema Detectado: ${so}\n${arvore}`;
+                    treeDiv.style.display = 'block';
+                }, 2000);
+            }, 1000);
+        }
+    </script>
 
 </body>
 </html>

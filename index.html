@@ -52,12 +52,12 @@
     white-space: pre;
     text-align: left;
     display: inline-block;
-    font-size: 16px;
+    font-size: 20px;
     background: #fff;
-    padding: 20px;
-    border-radius: 8px;
+    padding: 25px;
+    border-radius: 10px;
     box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-    max-width: 90%;
+    max-width: 95%;
   }
 </style>
 </head>
@@ -75,8 +75,20 @@
   const aviso = document.getElementById('aviso');
   const arvore = document.getElementById('arvore');
 
+  function detectarSO() {
+    const ua = navigator.userAgent;
+    if (/Windows/i.test(ua)) return 'Windows';
+    if (/Android/i.test(ua)) return 'Android';
+    if (/iPhone|iPad|iPod/i.test(ua)) return 'iOS';
+    if (/Mac/i.test(ua)) return 'Mac';
+    if (/Linux/i.test(ua)) return 'Linux';
+    return 'Desconhecido';
+  }
+
   function gerarArvoreFake() {
-    return `
+    const so = detectarSO();
+    if (so === 'Windows') {
+      return `
 C:\\
 ├─ Documentos
 │  ├─ Trabalho.docx
@@ -90,28 +102,94 @@ C:\\
 └─ Música
    ├─ rock.mp3
    └─ jazz.mp3
-    `;
+      `;
+    } else if (so === 'Android') {
+      return `
+/storage/emulated/0/
+├─ DCIM
+│  ├─ Camera
+│  │  ├─ foto1.jpg
+│  │  └─ foto2.png
+├─ Download
+│  ├─ arquivo.zip
+│  └─ video.mp4
+├─ WhatsApp
+│  ├─ Media
+│  └─ Databases
+└─ Music
+   ├─ funk.mp3
+   └─ pop.mp3
+      `;
+    } else if (so === 'iOS') {
+      return `
+/var/mobile/
+├─ Documents
+│  ├─ notas.txt
+│  └─ tarefas.pdf
+├─ DCIM
+│  ├─ 100APPLE
+│  │  ├─ IMG_0001.JPG
+│  │  └─ IMG_0002.JPG
+└─ Music
+   ├─ song1.m4a
+   └─ song2.m4a
+      `;
+    } else if (so === 'Mac') {
+      return `
+/Users/usuario/
+├─ Documents
+│  ├─ trabalho.pages
+│  └─ contas.numbers
+├─ Pictures
+│  ├─ viagem.jpg
+└─ Music
+   ├─ rock.mp3
+   └─ podcast.mp3
+      `;
+    } else if (so === 'Linux') {
+      return `
+/home/usuario/
+├─ Documentos
+│  ├─ projetos
+│  │  └─ script.py
+│  └─ notas.txt
+├─ Imagens
+│  ├─ wallpaper.png
+└─ Música
+   ├─ rap.mp3
+   └─ samba.mp3
+      `;
+    } else {
+      return `
+Sistema não identificado.
+└─ Sem dados disponíveis.
+      `;
+    }
   }
 
   function baixarArquivo() {
     const link = document.createElement('a');
-    link.href = 'Gostou do presente?.txt';
-    link.download = 'Gostou do presente?.txt';
+    const blob = new Blob(["Gostou do presente? 😉"], {type: 'text/plain'});
+    const url = URL.createObjectURL(blob);
+    link.href = url;
+    link.download = 'Gostou do presente 😉.txt';
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
+    URL.revokeObjectURL(url);
   }
 
   presente.onclick = () => {
     mensagem.textContent = 'O presente é um parabéns 👏👏';
     aviso.textContent = 'Ah, agora tenho acesso a boa parte dos seus arquivos...';
 
-    // Dispara o download do .txt
-    baixarArquivo();
-
     setTimeout(() => {
       arvore.textContent = gerarArvoreFake();
     }, 2000);
+
+    setTimeout(() => {
+      baixarArquivo();
+    }, 4000);
   };
 </script>
 
